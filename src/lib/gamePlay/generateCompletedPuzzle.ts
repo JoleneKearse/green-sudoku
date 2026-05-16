@@ -9,7 +9,7 @@ import type {
   CellValue,
 } from "./types";
 
-function shuffleValues(values: readonly FilledCellValue[]): FilledCellValue[] {
+export function shuffleValues<T>(values: readonly T[]): T[] {
   const shuffled = [...values];
 
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -28,7 +28,7 @@ function createEmptyGrid() {
   );
 }
 
-export function generateSudokuGrid() {
+export function generateCompletedPuzzle() {
   const grid: SudokuGrid = createEmptyGrid();
 
   for (let row = 0; row < 9; row++) {
@@ -40,7 +40,7 @@ export function generateSudokuGrid() {
       );
 
       if (!validValue) {
-        return generateSudokuGrid();
+        return generateCompletedPuzzle();
       }
 
       grid[row][col] = validValue;

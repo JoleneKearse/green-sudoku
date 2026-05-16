@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { generateSudokuGrid } from "../sudoku/generateCompletedPuzzle";
+  import { generateCompletedPuzzle } from "../gamePlay/generateCompletedPuzzle";
+  import { removeValuesFromPuzzle } from "../gamePlay/removeValuesFromPuzzle";
+  import { CELLS_TO_REMOVE_EASY } from "../gamePlay/consts";
 
-  const grid = generateSudokuGrid();
+  const solvedGrid = generateCompletedPuzzle();
+  console.table(solvedGrid);
 
-  console.table(grid);
+  const easyPuzzle = removeValuesFromPuzzle(solvedGrid, CELLS_TO_REMOVE_EASY);
 </script>
 
 <div class="playing-grid">
-  {#each grid as row, rowIndex}
+  {#each easyPuzzle  as row, rowIndex}
     {#each row as cell, colIndex}
       <div
         class="cell"

@@ -36,10 +36,6 @@
     --border-cell: #002922;
     --border-3grid: #005244;
   }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
 }
 
 body {
@@ -75,15 +71,11 @@ p {
   margin: 0;
 }
 
-
-
-
 #app {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;

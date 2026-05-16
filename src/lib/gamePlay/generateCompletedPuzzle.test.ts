@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { generateSudokuGrid } from "./generateCompletedPuzzle";
+import { generateCompletedPuzzle } from "./generateCompletedPuzzle";
 
-describe("generateSudokuGrid", () => {
+describe("generateCompletedPuzzle", () => {
     it("creates a valid 9x9 grid", () => {
-        const grid = generateSudokuGrid();
+        const grid = generateCompletedPuzzle();
 
         expect(grid).toHaveLength(9);
         expect(grid[0]).toHaveLength(9);
