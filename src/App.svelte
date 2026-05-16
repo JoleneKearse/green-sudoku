@@ -1,5 +1,5 @@
 <script>
-  import PlayingGrid from './lib/PlayingGrid.svelte'
+  import PlayingGrid from './lib/components/PlayingGrid.svelte'
 </script>
   
 <main>

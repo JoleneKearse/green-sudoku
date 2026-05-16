@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { generateSudokuGrid } from "./generate";
+import { generateSudokuGrid } from "./generateCompletedPuzzle";
 
 describe("generateSudokuGrid", () => {
     it("creates a valid 9x9 grid", () => {

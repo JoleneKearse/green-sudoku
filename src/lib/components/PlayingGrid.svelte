@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { generateSudokuGrid } from "./sudoku/generate";
+  import { generateSudokuGrid } from "../sudoku/generateCompletedPuzzle";
 
   const grid = generateSudokuGrid();
 
