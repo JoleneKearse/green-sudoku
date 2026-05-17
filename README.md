@@ -45,3 +45,20 @@ If you have state that's important to retain within a component, consider creati
 import { writable } from 'svelte/store'
 export default writable(0)
 ```
+
+
+## Easy Puzzle
+- 45 cells to remove
+- 3 naked singles
+- 20 hidden singles
+
+- 45 cells to remove
+- 9 naked singles
+- 34 hidden singles
+- 3x3 with 2 clues
+- 3x3 with 1 clue
+
+## Medium Puzzle
+- 4 Naked Singles
+- 3 Hidden Singles in rows
+

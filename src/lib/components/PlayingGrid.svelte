@@ -2,15 +2,25 @@
   import { generateCompletedPuzzle } from "../gamePlay/generateCompletedPuzzle";
   import { removeValuesFromPuzzle } from "../gamePlay/removeValuesFromPuzzle";
   import { CELLS_TO_REMOVE_EASY } from "../gamePlay/consts";
+  import { findHiddenSingles, findNakedSingles } from "../gamePlay/determinePuzzleDifficulty";
+
 
   const solvedGrid = generateCompletedPuzzle();
   console.table(solvedGrid);
 
-  const easyPuzzle = removeValuesFromPuzzle(solvedGrid, CELLS_TO_REMOVE_EASY);
+  const puzzleCandidate = removeValuesFromPuzzle(solvedGrid, CELLS_TO_REMOVE_EASY);
+
+  const nakedSingles = findNakedSingles(puzzleCandidate);
+  console.log("Naked singles available:", nakedSingles.length);
+  console.table(nakedSingles);
+
+  const hiddenSingles = findHiddenSingles(puzzleCandidate);
+  console.log("Hidden singles available:", hiddenSingles.length);
+  console.table(hiddenSingles);
 </script>
 
 <div class="playing-grid">
-  {#each easyPuzzle  as row, rowIndex}
+  {#each puzzleCandidate  as row, rowIndex}
     {#each row as cell, colIndex}
       <div
         class="cell"
