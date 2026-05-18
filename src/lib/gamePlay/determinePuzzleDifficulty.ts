@@ -49,7 +49,7 @@ export function findHiddenSingles(grid: SudokuGrid): SudokuCell[] {
     return [
         ...findHiddenSinglesInRow(grid),
         ...findHiddenSinglesInCol(grid),
-        ...findHiddenSinglesGrid(grid),
+        ...findHiddenSinglesInGrid(grid),
     ];
 }
 
@@ -119,7 +119,7 @@ function findHiddenSinglesInCol(grid: SudokuGrid): SudokuCell[] {
     return hiddenSingles;
 }
 
-function findHiddenSinglesGrid(grid: SudokuGrid): SudokuCell[] {
+function findHiddenSinglesInGrid(grid: SudokuGrid): SudokuCell[] {
     const hiddenSingles: SudokuCell[] = [];
 
     for (let gridStartRow = 0; gridStartRow < 9; gridStartRow += 3) {
