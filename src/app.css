@@ -71,6 +71,11 @@ p {
   margin: 0;
 }
 
+button {
+  all: unset;
+  cursor: pointer;
+}
+
 #app {
   width: 1126px;
   max-width: 100%;

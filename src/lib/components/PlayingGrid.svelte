@@ -2,7 +2,7 @@
   import { generateCompletedPuzzle } from "../gamePlay/generateCompletedPuzzle";
   import { removeValuesFromPuzzle } from "../gamePlay/removeValuesFromPuzzle";
   import { CELLS_TO_REMOVE_EASY } from "../gamePlay/consts";
-  import { findHiddenSingles, findNakedSingles } from "../gamePlay/determinePuzzleDifficulty";
+  import { findHiddenSingles, findNakedSingles } from "../gamePlay/puzzleDifficultyUtils";
 
 
   const solvedGrid = generateCompletedPuzzle();
@@ -22,7 +22,7 @@
 <div class="playing-grid">
   {#each puzzleCandidate  as row, rowIndex}
     {#each row as cell, colIndex}
-      <div
+      <button
         class="cell"
         class:thick-left={colIndex === 3 || colIndex === 6}
         class:thick-top={rowIndex === 3 || rowIndex === 6}
@@ -30,7 +30,7 @@
         class:no-border-bottom={rowIndex === 8}
       >
         {cell}
-      </div>
+      </button>
     {/each}
   {/each}
 </div>
