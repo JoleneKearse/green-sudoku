@@ -1,5 +1,7 @@
 import type { FilledCellValue, SudokuGrid, CellIndex } from "./types";
 
+
+
 function isValueInRow(grid: SudokuGrid, row: CellIndex, value: FilledCellValue) {
   return grid[row].includes(value);
 }

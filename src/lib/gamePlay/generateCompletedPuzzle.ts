@@ -1,13 +1,14 @@
 import { FILLED_VALUES, EMPTY_VALUE } from "./consts";
 
-import { isValidPlacement } from "./validation";
+import { isValidPlacement } from "./validateSolvedPuzzle";
 
 import type {
-  FilledCellValue,
   SudokuGrid,
   CellIndex,
   CellValue,
 } from "./types";
+
+
 
 export function shuffleValues<T>(values: readonly T[]): T[] {
   const shuffled = [...values];

@@ -1,6 +1,8 @@
 import { expect, it, describe } from "vitest";
+
 import { removeValuesFromPuzzle } from "./removeValuesFromPuzzle";
 import { generateCompletedPuzzle } from "./generateCompletedPuzzle";
+
 import { EMPTY_VALUE } from "./consts";
 
 describe("removeValuesFromPuzzle", () => {

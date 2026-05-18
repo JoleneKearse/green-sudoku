@@ -1,4 +1,4 @@
-import { isValidPlacement } from "./validation";
+import { isValidPlacement } from "./validateSolvedPuzzle";
 
 import { EMPTY_VALUE, FILLED_VALUES } from "./consts";
 
