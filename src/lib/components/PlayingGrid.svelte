@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { FilledCellValue, SudokuGrid } from "../gamePlay/types";
-
-  let { puzzleCandidate, initialPuzzle, selectedCell, selectedNumber, handleCellClick } = $props<{
+  let { puzzleCandidate, initialPuzzle, isCorrect, selectedCell, handleCellClick } = $props<{
     puzzleCandidate: SudokuGrid;
     initialPuzzle: SudokuGrid;
+    isCorrect: boolean;
     selectedCell: { row: number; col: number } | null;
     selectedNumber: FilledCellValue | null;
     handleCellClick: (rowIndex: number, colIndex: number) => void;
   }>();
+  import type { FilledCellValue, SudokuGrid } from "../gamePlay/types";
 </script>
 
 <section class="playing-grid">
@@ -20,7 +20,8 @@
         class:thick-top={rowIndex === 3 || rowIndex === 6}
         class:no-border-right= {colIndex === 8}
         class:no-border-bottom={rowIndex === 8}
-        class:user-filled={initialPuzzle[rowIndex][colIndex] === " " && cell !== " "}
+        class:user-filled={initialPuzzle[rowIndex][colIndex] === null && cell !== null}
+        class:wrong-user-filled={!isCorrect && selectedCell?.row === rowIndex && selectedCell?.col === colIndex}
         onclick={() => handleCellClick(rowIndex, colIndex)}
       >
         {cell}
@@ -53,6 +54,10 @@
 
   .user-filled {
     color: var(--text);
+  }
+
+  .wrong-user-filled {
+    color: var(--text-warning);
   }
 
   .thick-left {
