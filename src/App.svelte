@@ -10,8 +10,13 @@
   const solvedGrid = generateCompletedPuzzle();
   console.table(solvedGrid);
 
+  const initialPuzzle: SudokuGrid = removeValuesFromPuzzle(
+    solvedGrid,
+    CELLS_TO_REMOVE_EASY,
+  );
+
   let puzzleCandidate = $state<SudokuGrid>(
-    removeValuesFromPuzzle(solvedGrid, CELLS_TO_REMOVE_EASY),
+    initialPuzzle.map((row) => [...row]) as SudokuGrid,
   );
 
   let selectedCell = $state<{ row: number; col: number } | null>(null);
@@ -57,6 +62,7 @@
 <main>
   <PlayingGrid 
     {puzzleCandidate}
+    {initialPuzzle}
     {selectedCell}
     {selectedNumber}
     {handleCellClick}

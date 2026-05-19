@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { FilledCellValue, SudokuGrid } from "../gamePlay/types";
 
-  let { puzzleCandidate, selectedCell, selectedNumber, handleCellClick } = $props<{
+  let { puzzleCandidate, initialPuzzle, selectedCell, selectedNumber, handleCellClick } = $props<{
     puzzleCandidate: SudokuGrid;
+    initialPuzzle: SudokuGrid;
     selectedCell: { row: number; col: number } | null;
     selectedNumber: FilledCellValue | null;
     handleCellClick: (rowIndex: number, colIndex: number) => void;
@@ -19,6 +20,7 @@
         class:thick-top={rowIndex === 3 || rowIndex === 6}
         class:no-border-right= {colIndex === 8}
         class:no-border-bottom={rowIndex === 8}
+        class:user-filled={initialPuzzle[rowIndex][colIndex] === " " && cell !== " "}
         onclick={() => handleCellClick(rowIndex, colIndex)}
       >
         {cell}
@@ -44,8 +46,13 @@
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    color: var(--text-h);
     border-right: 1px solid var(--border-cell);
     border-bottom: 1px solid var(--border-cell);
+  }
+
+  .user-filled {
+    color: var(--text);
   }
 
   .thick-left {
