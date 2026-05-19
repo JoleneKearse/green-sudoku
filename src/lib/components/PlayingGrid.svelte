@@ -1,39 +1,31 @@
 <script lang="ts">
-  import { generateCompletedPuzzle } from "../gamePlay/generateCompletedPuzzle";
-  import { removeValuesFromPuzzle } from "../gamePlay/removeValuesFromPuzzle";
-  import { CELLS_TO_REMOVE_EASY } from "../gamePlay/consts";
-  import { findHiddenSingles, findNakedSingles } from "../gamePlay/puzzleDifficultyUtils";
+  import type { FilledCellValue, SudokuGrid } from "../gamePlay/types";
 
-
-  const solvedGrid = generateCompletedPuzzle();
-  console.table(solvedGrid);
-
-  const puzzleCandidate = removeValuesFromPuzzle(solvedGrid, CELLS_TO_REMOVE_EASY);
-
-  const nakedSingles = findNakedSingles(puzzleCandidate);
-  console.log("Naked singles available:", nakedSingles.length);
-  console.table(nakedSingles);
-
-  const hiddenSingles = findHiddenSingles(puzzleCandidate);
-  console.log("Hidden singles available:", hiddenSingles.length);
-  console.table(hiddenSingles);
+  let { puzzleCandidate, selectedCell, selectedNumber, handleCellClick } = $props<{
+    puzzleCandidate: SudokuGrid;
+    selectedCell: { row: number; col: number } | null;
+    selectedNumber: FilledCellValue | null;
+    handleCellClick: (rowIndex: number, colIndex: number) => void;
+  }>();
 </script>
 
-<div class="playing-grid">
-  {#each puzzleCandidate  as row, rowIndex}
+<section class="playing-grid">
+  {#each puzzleCandidate as row, rowIndex}
     {#each row as cell, colIndex}
       <button
         class="cell"
+        class:selected={selectedCell?.row === rowIndex && selectedCell?.col === colIndex}
         class:thick-left={colIndex === 3 || colIndex === 6}
         class:thick-top={rowIndex === 3 || rowIndex === 6}
         class:no-border-right= {colIndex === 8}
         class:no-border-bottom={rowIndex === 8}
+        onclick={() => handleCellClick(rowIndex, colIndex)}
       >
         {cell}
       </button>
     {/each}
   {/each}
-</div>
+</section>
 
 <style>
   .playing-grid {
@@ -70,5 +62,9 @@
 
   .no-border-bottom {
     border-bottom: none;
+  }
+
+  .selected {
+    background-color: var(--bg-selected);
   }
 </style>

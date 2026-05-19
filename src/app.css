@@ -1,6 +1,7 @@
 :root {
   --text: #006655;
   --text-h: #00B295;
+  --selected: #3dae9b;
   --text-warning: #B0413E;
   --bg: #ECE9EA;
   --bg-key: #E6E1F5;
@@ -31,6 +32,7 @@
   :root {
     --text: #ADFFF1;
     --bg: #001411;
+    --bg-selected: #013028;
     --bg-key: #1F153D;
     --border: #2e303a;
     --border-cell: #002922;
