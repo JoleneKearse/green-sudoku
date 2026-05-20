@@ -1,26 +1,35 @@
 <script lang="ts">
   import { generateCompletedPuzzle } from "./lib/gamePlay/generateCompletedPuzzle";
   import { removeValuesFromPuzzle } from './lib/gamePlay/removeValuesFromPuzzle';
-  import { findHiddenSingles, findNakedSingles } from "./lib/gamePlay/puzzleDifficultyUtils";
+  import { findHiddenSingles, findNakedSingles, placeLikelyEasyMoves } from "./lib/gamePlay/puzzleDifficultyUtils";
+  import { canSolveWithEasyStrategies } from "./lib/gamePlay/puzzleDifficultyAssignment";
   import { checkCellForCorrectness } from "./lib/gamePlay/playUtils";
   import PlayingGrid from './lib/components/PlayingGrid.svelte'
   import NumberGrid from './lib/components/NumberGrid.svelte'
   import { CELLS_TO_REMOVE_EASY } from "./lib/gamePlay/consts";
-  import type { CellIndex, FilledCellValue, SudokuGrid } from "./lib/gamePlay/types";
+  import type { CellIndex, Difficulty, FilledCellValue, SudokuGrid } from "./lib/gamePlay/types";
 
-  const solvedGrid = generateCompletedPuzzle();
+  function generatePuzzleByDifficulty(difficulty: Difficulty): { solvedGrid: SudokuGrid; puzzle: SudokuGrid } {
+    while (true) {
+      const solved = generateCompletedPuzzle();
+      const candidate = removeValuesFromPuzzle(solved, CELLS_TO_REMOVE_EASY);
+
+      if (difficulty === "easy" && canSolveWithEasyStrategies(candidate)) {
+        return { solvedGrid: solved, puzzle: candidate };
+      }
+    }
+  }
+
+  let difficulty = $state<Difficulty>("easy");
+
+  const { solvedGrid, puzzle: easyPuzzle } = generatePuzzleByDifficulty(difficulty);
   console.table(solvedGrid);
-
-  const initialPuzzle: SudokuGrid = removeValuesFromPuzzle(
-    solvedGrid,
-    CELLS_TO_REMOVE_EASY,
-  );
-
+  const initialPuzzle: SudokuGrid = easyPuzzle;
   let puzzleCandidate = $state<SudokuGrid>(
     initialPuzzle.map((row) => [...row]) as SudokuGrid,
   );
-  let isCorrect = $state(true);
 
+  let isCorrect = $state(true);
   let selectedCell = $state<{ row: number; col: number } | null>(null);
   let selectedNumber = $state<FilledCellValue | null>(null);
 
@@ -45,27 +54,27 @@
   }
 
   function placeSelectedNumber(number: FilledCellValue | null, row?: number, col?: number) {
-	const targetRow = row ?? selectedCell?.row;
-	const targetCol = col ?? selectedCell?.col;
+    const targetRow = row ?? selectedCell?.row;
+    const targetCol = col ?? selectedCell?.col;
 
-	if (targetRow === undefined || targetCol === undefined) return;
+    if (targetRow === undefined || targetCol === undefined) return;
 
-	if (initialPuzzle[targetRow][targetCol] !== null) {
-		selectedCell = null;
-		return;
-	}
+    if (initialPuzzle[targetRow][targetCol] !== null) {
+      selectedCell = null;
+      return;
+    }
 
-  puzzleCandidate = puzzleCandidate.map((currentRow, rowIndex) =>
-    currentRow.map((cell, colIndex) =>
-      rowIndex === targetRow && colIndex === targetCol ? (number ?? null) : cell
-    )
-  );
+    puzzleCandidate = puzzleCandidate.map((currentRow, rowIndex) =>
+      currentRow.map((cell, colIndex) =>
+        rowIndex === targetRow && colIndex === targetCol ? (number ?? null) : cell
+      )
+    );
 
-  isCorrect = checkSelectedCell(targetRow, targetCol, number);
+    isCorrect = checkSelectedCell(targetRow, targetCol, number);
 
-  if (isCorrect || number === null) {
-    selectedCell = null;
-  }
+    if (isCorrect || number === null) {
+      selectedCell = null;
+    }
   }
 
   function handleNumberPick(number: FilledCellValue | null) {
@@ -84,6 +93,18 @@
     const hiddenSingles = findHiddenSingles(puzzleCandidate);
     console.log("Hidden singles available:", hiddenSingles.length);
     console.table(hiddenSingles);
+  });
+
+  $effect(() => {
+    const easyPreview = placeLikelyEasyMoves(puzzleCandidate, 3);
+
+    console.table(easyPreview.placedMoves);
+    console.table(easyPreview.nakedSinglesAfter);
+    console.table(easyPreview.hiddenSinglesAfter);
+
+    console.log("Placed moves:", easyPreview.placedMoves.length);
+    console.log("Naked singles after:", easyPreview.nakedSinglesAfter.length);
+    console.log("Hidden singles after:", easyPreview.hiddenSinglesAfter.length);
   });
 </script>
   

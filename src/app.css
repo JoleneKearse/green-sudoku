@@ -1,7 +1,8 @@
 :root {
   --text: #006655;
   --text-h: #00B295;
-  --selected: #3dae9b;
+  --text-user-filled: #02705e;
+  --selected: #3DAE9B;
   --text-warning: #B0413E;
   --bg: #ECE9EA;
   --bg-key: #E6E1F5;

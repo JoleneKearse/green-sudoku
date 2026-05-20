@@ -11,3 +11,16 @@ export type SudokuCell = {
   col: CellIndex;
   value: CellValue;
 };
+
+export type UnitType = "row" | "col" | "grid";
+
+export type Difficulty = "easy" | "medium" | "hard";
+
+export type LikelyLookSpot = {
+  type: UnitType
+  index: CellIndex;
+  clueCount: number;
+  hiddenSinglesCount?: number;
+  emptyCount: number;
+  score: number;
+}

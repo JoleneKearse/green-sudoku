@@ -1,10 +1,7 @@
 import { isValidPlacement } from "./validateSolvedPuzzle";
-
 import { EMPTY_VALUE, FILLED_VALUES } from "./consts";
-
-import type { CellIndex, SudokuGrid, FilledCellValue, SudokuCell,  } from "./types";
-
-
+import type { CellIndex, SudokuGrid, FilledCellValue, SudokuCell, LikelyLookSpot } from "./types";
+import { findLikelyFirstCandidates } from "./likelyFirstCandidates";
 
 export function getCandidatesForCell(grid: SudokuGrid, row: CellIndex, col: CellIndex): FilledCellValue[] {
     if (grid[row][col] !== EMPTY_VALUE) {
@@ -13,8 +10,6 @@ export function getCandidatesForCell(grid: SudokuGrid, row: CellIndex, col: Cell
 
     return FILLED_VALUES.filter((value) => isValidPlacement(grid, row, col, value));
 }
-
-
 
 // search the number of candidates where there is only one possible number it can be
 export function findNakedSingles(grid: SudokuGrid): SudokuCell[] {
@@ -41,8 +36,6 @@ export function findNakedSingles(grid: SudokuGrid): SudokuCell[] {
     }
     return nakedSingles;
 }
-
-
 
 // search the candidates for where only one number is only possible in one row, column and 3x3 grid. 
 export function findHiddenSingles(grid: SudokuGrid): SudokuCell[] {
@@ -157,4 +150,83 @@ function findHiddenSinglesInGrid(grid: SudokuGrid): SudokuCell[] {
         }
     }
     return hiddenSingles;
+}
+
+// Helper function to deduplicate moves that may be found by both hidden and naked single strategies
+function deduplicateMoves(moves: SudokuCell[]): SudokuCell[] {
+    const uniqueMoves = new Set<string>();
+
+    return moves.filter((move) => {
+        const key = `${move.row}-${move.col}-${move.value}`;
+
+        if (uniqueMoves.has(key)) {
+            return false;
+        }
+
+        uniqueMoves.add(key);
+        return true;
+    })
+}
+
+// Calculate the moves based on the naked and hidden singles strategies
+export function findLikelyMoves(grid: SudokuGrid): SudokuCell[] {
+    return deduplicateMoves([
+        ...findNakedSingles(grid),
+        ...findHiddenSingles(grid),
+    ]);
+}
+
+// Find if a move is inside a likely look spot
+function isMoveInLikelyLookSpot(move: SudokuCell, spot: LikelyLookSpot): boolean {
+    if (spot.type === "row") {
+        return move.row === spot.index;
+    }
+
+    if (spot.type === "col") {
+        return move.col === spot.index;
+    }
+
+    if (spot.type === "grid") {
+        const moveGridIndex = Math.floor(move.row / 3) * 3 + Math.floor(move.col / 3);
+        return moveGridIndex === spot.index;
+    }
+
+    return false;
+}
+
+function findLikelyEasyMove(grid: SudokuGrid): SudokuCell | null {
+    const likelyLookSpots = findLikelyFirstCandidates(grid);
+    const easyMoves = findLikelyMoves(grid);
+
+    for (const spot of likelyLookSpots) {
+        const moveInSpot = easyMoves.find((move) => isMoveInLikelyLookSpot(move, spot));
+
+        if (moveInSpot) {
+            return moveInSpot;
+        }
+    }
+    return easyMoves[0] ?? null;
+}
+
+export function placeLikelyEasyMoves(grid: SudokuGrid, numberOfMoves: number): { gridAfterMoves: SudokuGrid, placedMoves: SudokuCell[], nakedSinglesAfter: SudokuCell[], hiddenSinglesAfter: SudokuCell[] } {
+    const workingGrid = grid.map((row) => [...row]) as SudokuGrid;
+    const placedMoves: SudokuCell[] = [];
+
+    for (let i = 0; i < numberOfMoves; i++) {
+        const move = findLikelyEasyMove(workingGrid);
+
+        if (!move) {
+            break;
+        }
+
+        workingGrid[move.row][move.col] = move.value;
+        placedMoves.push(move);
+    }
+
+    return {
+        gridAfterMoves: workingGrid,
+        placedMoves,
+        nakedSinglesAfter: findNakedSingles(workingGrid),
+        hiddenSinglesAfter: findHiddenSingles(workingGrid),
+    }
 }

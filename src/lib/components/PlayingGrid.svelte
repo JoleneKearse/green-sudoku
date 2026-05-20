@@ -53,7 +53,7 @@
   }
 
   .user-filled {
-    color: var(--text);
+    color: var(--text-user-filled);
   }
 
   .wrong-user-filled {
