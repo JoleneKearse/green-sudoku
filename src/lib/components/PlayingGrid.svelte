@@ -48,6 +48,7 @@
     justify-content: center;
     font-size: 20px;
     color: var(--text-h);
+    background-color: var(--bg);;
     border-right: 1px solid var(--border-cell);
     border-bottom: 1px solid var(--border-cell);
   }

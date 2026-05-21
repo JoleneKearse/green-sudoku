@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { generateCompletedPuzzle } from "./lib/gamePlay/generateCompletedPuzzle";
-  import { removeValuesFromPuzzle } from './lib/gamePlay/removeValuesFromPuzzle';
-  import { findHiddenSingles, findNakedSingles, placeLikelyEasyMoves } from "./lib/gamePlay/puzzleDifficultyUtils";
-  import { canSolveWithEasyStrategies } from "./lib/gamePlay/puzzleDifficultyAssignment";
-  import { checkCellForCorrectness } from "./lib/gamePlay/playUtils";
-  import PlayingGrid from './lib/components/PlayingGrid.svelte'
-  import NumberGrid from './lib/components/NumberGrid.svelte'
-  import { CELLS_TO_REMOVE_EASY } from "./lib/gamePlay/consts";
-  import type { CellIndex, Difficulty, FilledCellValue, SudokuGrid } from "./lib/gamePlay/types";
+  import { generateCompletedPuzzle } from "$lib/gamePlay/generateCompletedPuzzle";
+  import { removeValuesFromPuzzle } from '$lib/gamePlay/removeValuesFromPuzzle';
+  import { findHiddenSingles, findNakedSingles, placeLikelyEasyMoves } from "$lib/gamePlay/puzzleDifficultyUtils";
+  import { canSolveWithEasyStrategies } from "$lib/gamePlay/puzzleDifficultyAssignment";
+  import { checkCellForCorrectness } from "$lib/gamePlay/playUtils";
+  import PlayingGrid from '$lib/components/PlayingGrid.svelte'
+  import NumberGrid from '$lib/components/NumberGrid.svelte'
+  import { CELLS_TO_REMOVE_EASY } from "$lib/gamePlay/consts";
+  import type { CellIndex, Difficulty, FilledCellValue, SudokuGrid } from "$lib/gamePlay/types";
 
   function generatePuzzleByDifficulty(difficulty: Difficulty): { solvedGrid: SudokuGrid; puzzle: SudokuGrid } {
     while (true) {
@@ -130,5 +130,9 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-image: url('/background.webp');
+    background-size: fit;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 </style>

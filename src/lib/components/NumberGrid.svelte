@@ -45,7 +45,8 @@ import EraseIcon from "./EraseIcon.svelte";
         font-size: 16px;
         border: 1px solid var(--border-playing);
         border-radius: 8px;
-        background-color: var(--cell-filled);
+        background-color: var(--bg-blur); 
+        backdrop-filter: blur(1.75px);
         color: var(--text-primary);
         cursor: pointer;
     }
