@@ -5,6 +5,7 @@
   --selected: #3DAE9B;
   --text-warning: #B0413E;
   --bg: #ECE9EA;
+  --bg-blur: #ECE9EA80;
   --bg-key: #E6E1F5;
   --border: #e5e4e7;
   --border-cell: #99FFF0;
@@ -33,6 +34,7 @@
   :root {
     --text: #ADFFF1;
     --bg: #001411;
+    --bg-blur: #00141180;
     --bg-selected: #013028;
     --bg-key: #1F153D;
     --border: #2e303a;
