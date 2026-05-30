@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { puzzleCandidate, initialPuzzle, isCorrect, selectedCell, cellCompletionTicks, puzzleCompletionTick, isPuzzleSolvedNow, handleCellClick } = $props<{
+  let { puzzleCandidate, initialPuzzle, isCorrect, selectedCell, cellCompletionTicks, puzzleCompletionTick, isPuzzleSolvedNow, handleCellClick, handleKeyDown } = $props<{
     puzzleCandidate: SudokuGrid;
     initialPuzzle: SudokuGrid;
     isCorrect: boolean;
@@ -9,6 +9,7 @@
     puzzleCompletionTick: number;
     isPuzzleSolvedNow: boolean;
     handleCellClick: (rowIndex: number, colIndex: number) => void;
+    handleKeyDown: (row: number, col: number, event: KeyboardEvent) => void;
   }>();
   import type { FilledCellValue, SudokuGrid } from "../gamePlay/types";
 </script>
@@ -18,6 +19,7 @@
     {#each row as cell, colIndex}
       <button
         class="cell"
+        onkeydown={(event) => handleKeyDown(rowIndex, colIndex, event)}
         class:selected={selectedCell?.row === rowIndex && selectedCell?.col === colIndex}
         class:thick-left={colIndex === 3 || colIndex === 6}
         class:thick-top={rowIndex === 3 || rowIndex === 6}

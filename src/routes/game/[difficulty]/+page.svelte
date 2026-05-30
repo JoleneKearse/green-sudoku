@@ -174,6 +174,22 @@
     placeSelectedNumber(number);
   }
 
+  function handleKeyDown(row: number, col: number, event: KeyboardEvent) {
+    const key = event.key;
+    console.log(`Key pressed: ${key}`);
+
+    if (key >= "1" && key <= "9") {
+      event.preventDefault();
+      const number = parseInt(key) as FilledCellValue;
+      selectedNumber = number;
+      placeSelectedNumber(number, row, col);
+    } else if (key === "Backspace" || key === "Delete") {
+      event.preventDefault();
+      placeSelectedNumber(null, row, col);
+      return;
+    }
+  }
+
   $effect(() => {
     const { groupKeys: currentCompletedGroupKeys, cellsByGroup } = getCompletedGroupState(
       puzzleCandidate,
@@ -255,6 +271,7 @@
     {puzzleCompletionTick}
     {isPuzzleSolvedNow}
     {handleCellClick}
+    {handleKeyDown}
   />
   <NumberGrid 
     {selectedNumber}
