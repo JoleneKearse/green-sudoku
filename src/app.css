@@ -91,3 +91,15 @@ button {
   flex-direction: column;
   box-sizing: border-box;
 }
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('/background.webp');
+    background-size: fit;
+    background-repeat: no-repeat;
+    background-position: center;
+  }

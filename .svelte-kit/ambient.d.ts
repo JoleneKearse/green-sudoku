@@ -41,17 +41,17 @@ declare module '$env/static/private' {
 	export const SHELL: string;
 	export const LSCOLORS: string;
 	export const npm_command: string;
-	export const USER_ZDOTDIR: string;
 	export const COLORTERM: string;
 	export const LESS: string;
 	export const HISTCONTROL: string;
 	export const WSL2_GUI_APPS_ENABLED: string;
 	export const TERM_PROGRAM_VERSION: string;
+	export const COPILOT_DEBUG_NONCE: string;
 	export const WSL_DISTRO_NAME: string;
 	export const npm_config_autoInstallPeers: string;
 	export const npm_config_npm_globalconfig: string;
-	export const HOSTNAME: string;
 	export const HISTSIZE: string;
+	export const HOSTNAME: string;
 	export const NODE: string;
 	export const DOTNET_ROOT: string;
 	export const WARP_CLIENT_VERSION: string;
@@ -59,7 +59,6 @@ declare module '$env/static/private' {
 	export const FIG_SET_PARENT_CHECK: string;
 	export const WARP_USE_SSH_WRAPPER: string;
 	export const npm_config__jsr_registry: string;
-	export const FIG_EXECUTION_STRING: string;
 	export const LC_FIG_SET_PARENT: string;
 	export const FIGTERM_SESSION_ID: string;
 	export const npm_config_globalconfig: string;
@@ -72,7 +71,6 @@ declare module '$env/static/private' {
 	export const PNPM_HOME: string;
 	export const npm_config_store_dir: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
-	export const VSCODE_INJECTION: string;
 	export const HOME: string;
 	export const LANG: string;
 	export const WSL_INTEROP: string;
@@ -90,7 +88,6 @@ declare module '$env/static/private' {
 	export const pnpm_config_verify_deps_before_run: string;
 	export const INIT_CWD: string;
 	export const DOTNET_BUNDLE_EXTRACT_BASE_DIR: string;
-	export const FIG_IS_LOGIN_SHELL: string;
 	export const npm_lifecycle_script: string;
 	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 	export const WARP_CLI_AGENT_PROTOCOL_VERSION: string;
@@ -98,7 +95,6 @@ declare module '$env/static/private' {
 	export const npm_package_name: string;
 	export const ZSH: string;
 	export const VSCODE_NONCE: string;
-	export const ZDOTDIR: string;
 	export const LESSOPEN: string;
 	export const USER: string;
 	export const npm_config_frozen_lockfile: string;
@@ -109,7 +105,6 @@ declare module '$env/static/private' {
 	export const SHLVL: string;
 	export const GOTOOLCHAIN: string;
 	export const PAGER: string;
-	export const FIG_SHELL: string;
 	export const npm_config_user_agent: string;
 	export const PNPM_SCRIPT_SRC_DIR: string;
 	export const npm_execpath: string;
@@ -117,7 +112,6 @@ declare module '$env/static/private' {
 	export const NODE_PATH: string;
 	export const DEBUGINFOD_URLS: string;
 	export const WARP_IS_LOCAL_SHELL_SESSION: string;
-	export const FIG_START_TEXT: string;
 	export const WSLENV: string;
 	export const npm_package_json: string;
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
@@ -227,17 +221,17 @@ declare module '$env/dynamic/private' {
 		SHELL: string;
 		LSCOLORS: string;
 		npm_command: string;
-		USER_ZDOTDIR: string;
 		COLORTERM: string;
 		LESS: string;
 		HISTCONTROL: string;
 		WSL2_GUI_APPS_ENABLED: string;
 		TERM_PROGRAM_VERSION: string;
+		COPILOT_DEBUG_NONCE: string;
 		WSL_DISTRO_NAME: string;
 		npm_config_autoInstallPeers: string;
 		npm_config_npm_globalconfig: string;
-		HOSTNAME: string;
 		HISTSIZE: string;
+		HOSTNAME: string;
 		NODE: string;
 		DOTNET_ROOT: string;
 		WARP_CLIENT_VERSION: string;
@@ -245,7 +239,6 @@ declare module '$env/dynamic/private' {
 		FIG_SET_PARENT_CHECK: string;
 		WARP_USE_SSH_WRAPPER: string;
 		npm_config__jsr_registry: string;
-		FIG_EXECUTION_STRING: string;
 		LC_FIG_SET_PARENT: string;
 		FIGTERM_SESSION_ID: string;
 		npm_config_globalconfig: string;
@@ -258,7 +251,6 @@ declare module '$env/dynamic/private' {
 		PNPM_HOME: string;
 		npm_config_store_dir: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
-		VSCODE_INJECTION: string;
 		HOME: string;
 		LANG: string;
 		WSL_INTEROP: string;
@@ -276,7 +268,6 @@ declare module '$env/dynamic/private' {
 		pnpm_config_verify_deps_before_run: string;
 		INIT_CWD: string;
 		DOTNET_BUNDLE_EXTRACT_BASE_DIR: string;
-		FIG_IS_LOGIN_SHELL: string;
 		npm_lifecycle_script: string;
 		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 		WARP_CLI_AGENT_PROTOCOL_VERSION: string;
@@ -284,7 +275,6 @@ declare module '$env/dynamic/private' {
 		npm_package_name: string;
 		ZSH: string;
 		VSCODE_NONCE: string;
-		ZDOTDIR: string;
 		LESSOPEN: string;
 		USER: string;
 		npm_config_frozen_lockfile: string;
@@ -295,7 +285,6 @@ declare module '$env/dynamic/private' {
 		SHLVL: string;
 		GOTOOLCHAIN: string;
 		PAGER: string;
-		FIG_SHELL: string;
 		npm_config_user_agent: string;
 		PNPM_SCRIPT_SRC_DIR: string;
 		npm_execpath: string;
@@ -303,7 +292,6 @@ declare module '$env/dynamic/private' {
 		NODE_PATH: string;
 		DEBUGINFOD_URLS: string;
 		WARP_IS_LOCAL_SHELL_SESSION: string;
-		FIG_START_TEXT: string;
 		WSLENV: string;
 		npm_package_json: string;
 		VSCODE_GIT_ASKPASS_MAIN: string;

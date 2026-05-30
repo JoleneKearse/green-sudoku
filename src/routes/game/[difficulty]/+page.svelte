@@ -9,6 +9,76 @@
   import { CELLS_TO_REMOVE_EASY } from "$lib/gamePlay/consts";
   import type { CellIndex, Difficulty, FilledCellValue, SudokuGrid } from "$lib/gamePlay/types";
 
+  type CellKey = `${number}-${number}`;
+
+  function buildCellKey(row: number, col: number): CellKey {
+    return `${row}-${col}`;
+  }
+
+  function getCompletedGroupState(grid: SudokuGrid, solved: SudokuGrid): {
+    groupKeys: Set<string>;
+    cellsByGroup: Map<string, CellKey[]>;
+  } {
+    const groupKeys = new Set<string>();
+    const cellsByGroup = new Map<string, CellKey[]>();
+
+    for (let row = 0; row < 9; row++) {
+      const isComplete = grid[row].every((cell, col) => cell !== null && cell === solved[row][col]);
+      if (!isComplete) continue;
+
+      const key = `row-${row}`;
+      groupKeys.add(key);
+      cellsByGroup.set(
+        key,
+        Array.from({ length: 9 }, (_, col) => buildCellKey(row, col)),
+      );
+    }
+
+    for (let col = 0; col < 9; col++) {
+      let isComplete = true;
+
+      for (let row = 0; row < 9; row++) {
+        if (grid[row][col] === null || grid[row][col] !== solved[row][col]) {
+          isComplete = false;
+          break;
+        }
+      }
+
+      if (!isComplete) continue;
+
+      const key = `col-${col}`;
+      groupKeys.add(key);
+      cellsByGroup.set(
+        key,
+        Array.from({ length: 9 }, (_, row) => buildCellKey(row, col)),
+      );
+    }
+
+    for (let boxRow = 0; boxRow < 3; boxRow++) {
+      for (let boxCol = 0; boxCol < 3; boxCol++) {
+        let isComplete = true;
+        const cells: CellKey[] = [];
+
+        for (let row = boxRow * 3; row < boxRow * 3 + 3; row++) {
+          for (let col = boxCol * 3; col < boxCol * 3 + 3; col++) {
+            cells.push(buildCellKey(row, col));
+            if (grid[row][col] === null || grid[row][col] !== solved[row][col]) {
+              isComplete = false;
+            }
+          }
+        }
+
+        if (!isComplete) continue;
+
+        const key = `box-${boxRow}-${boxCol}`;
+        groupKeys.add(key);
+        cellsByGroup.set(key, cells);
+      }
+    }
+
+    return { groupKeys, cellsByGroup };
+  }
+
   function generatePuzzleByDifficulty(difficulty: Difficulty): { solvedGrid: SudokuGrid; puzzle: SudokuGrid } {
     while (true) {
       const solved = generateCompletedPuzzle();
@@ -20,7 +90,7 @@
     }
   }
 
-  let difficulty = $state<Difficulty>("easy");
+  const difficulty: Difficulty = "easy";
 
   const { solvedGrid, puzzle: easyPuzzle } = generatePuzzleByDifficulty(difficulty);
   console.table(solvedGrid);
@@ -32,6 +102,12 @@
   let isCorrect = $state(true);
   let selectedCell = $state<{ row: number; col: number } | null>(null);
   let selectedNumber = $state<FilledCellValue | null>(null);
+  let cellCompletionTicks = $state<number[][]>(
+    Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => 0)),
+  );
+  let previousCompletedGroupKeys = new Set<string>(
+    getCompletedGroupState(initialPuzzle, solvedGrid).groupKeys,
+  );
 
   function checkSelectedCell(row: number, col: number, number: FilledCellValue | null) {
     if (initialPuzzle[row][col] !== null || number === null) {
@@ -84,6 +160,33 @@
   }
 
   $effect(() => {
+    const { groupKeys: currentCompletedGroupKeys, cellsByGroup } = getCompletedGroupState(
+      puzzleCandidate,
+      solvedGrid,
+    );
+    const newlyCompletedCells = new Set<CellKey>();
+
+    for (const groupKey of currentCompletedGroupKeys) {
+      if (previousCompletedGroupKeys.has(groupKey)) continue;
+
+      const groupCells = cellsByGroup.get(groupKey) ?? [];
+      for (const cellKey of groupCells) {
+        newlyCompletedCells.add(cellKey);
+      }
+    }
+
+    if (newlyCompletedCells.size > 0) {
+      cellCompletionTicks = cellCompletionTicks.map((rowTicks, rowIndex) =>
+        rowTicks.map((tick, colIndex) =>
+          newlyCompletedCells.has(buildCellKey(rowIndex, colIndex)) ? tick + 1 : tick,
+        ),
+      );
+    }
+
+    previousCompletedGroupKeys = currentCompletedGroupKeys;
+  });
+
+  $effect(() => {
     const nakedSingles = findNakedSingles(puzzleCandidate);
     console.log("Naked singles available:", nakedSingles.length);
     console.table(nakedSingles);
@@ -115,6 +218,7 @@
     {isCorrect}
     {selectedCell}
     {selectedNumber}
+    {cellCompletionTicks}
     {handleCellClick}
   />
   <NumberGrid 
