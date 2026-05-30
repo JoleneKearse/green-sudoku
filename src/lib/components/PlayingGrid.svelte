@@ -1,11 +1,13 @@
 <script lang="ts">
-  let { puzzleCandidate, initialPuzzle, isCorrect, selectedCell, cellCompletionTicks, handleCellClick } = $props<{
+  let { puzzleCandidate, initialPuzzle, isCorrect, selectedCell, cellCompletionTicks, puzzleCompletionTick, isPuzzleSolvedNow, handleCellClick } = $props<{
     puzzleCandidate: SudokuGrid;
     initialPuzzle: SudokuGrid;
     isCorrect: boolean;
     selectedCell: { row: number; col: number } | null;
     selectedNumber: FilledCellValue | null;
     cellCompletionTicks: number[][];
+    puzzleCompletionTick: number;
+    isPuzzleSolvedNow: boolean;
     handleCellClick: (rowIndex: number, colIndex: number) => void;
   }>();
   import type { FilledCellValue, SudokuGrid } from "../gamePlay/types";
@@ -26,11 +28,18 @@
         onclick={() => handleCellClick(rowIndex, colIndex)}
       >
         {#key cellCompletionTicks[rowIndex][colIndex]}
-          {#if cellCompletionTicks[rowIndex][colIndex] > 0}
+          {#if !isPuzzleSolvedNow && cellCompletionTicks[rowIndex][colIndex] > 0}
             <span class="completion-ripple" aria-hidden="true"></span>
           {/if}
         {/key}
-        <span class="cell-value">{cell}</span>
+        {#key `${rowIndex}-${colIndex}-${puzzleCompletionTick}`}
+          <span
+            class="cell-value"
+            class:puzzle-complete-bounce={puzzleCompletionTick > 0 && cell !== null}
+          >
+            {cell}
+          </span>
+        {/key}
       </button>
     {/each}
   {/each}
@@ -62,8 +71,38 @@
   }
 
   .cell-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     z-index: 1;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  .puzzle-complete-bounce {
+    animation: puzzle-complete-bounce 1.1s cubic-bezier(0.22, 0.78, 0.27, 1) forwards;
+  }
+
+  @keyframes puzzle-complete-bounce {
+    0% {
+      transform: scale(1);
+    }
+    20% {
+      transform: scale(1.18);
+    }
+    40% {
+      transform: scale(0.95);
+    }
+    62% {
+      transform: scale(1.12);
+    }
+    78% {
+      transform: scale(0.98);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .completion-ripple {
@@ -109,8 +148,8 @@
       34% 7%
     );
     transform-origin: 50% 64%;
-    filter: blur(1.8px);
-    animation: completion-ripple 2.5s ease-out forwards;
+    filter: blur(1.3px);
+    animation: completion-ripple 1.25s ease-out forwards;
   }
 
   .completion-ripple::after {

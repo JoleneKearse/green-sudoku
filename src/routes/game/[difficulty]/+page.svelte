@@ -79,6 +79,18 @@
     return { groupKeys, cellsByGroup };
   }
 
+  function isPuzzleSolved(grid: SudokuGrid, solved: SudokuGrid): boolean {
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (grid[row][col] === null || grid[row][col] !== solved[row][col]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   function generatePuzzleByDifficulty(difficulty: Difficulty): { solvedGrid: SudokuGrid; puzzle: SudokuGrid } {
     while (true) {
       const solved = generateCompletedPuzzle();
@@ -105,9 +117,12 @@
   let cellCompletionTicks = $state<number[][]>(
     Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => 0)),
   );
+  let puzzleCompletionTick = $state(0);
+  let isPuzzleSolvedNow = $state(isPuzzleSolved(initialPuzzle, solvedGrid));
   let previousCompletedGroupKeys = new Set<string>(
     getCompletedGroupState(initialPuzzle, solvedGrid).groupKeys,
   );
+  let wasPuzzleSolved = isPuzzleSolved(initialPuzzle, solvedGrid);
 
   function checkSelectedCell(row: number, col: number, number: FilledCellValue | null) {
     if (initialPuzzle[row][col] !== null || number === null) {
@@ -164,6 +179,13 @@
       puzzleCandidate,
       solvedGrid,
     );
+    const solvedNow = isPuzzleSolved(puzzleCandidate, solvedGrid);
+
+    if (solvedNow) {
+      previousCompletedGroupKeys = currentCompletedGroupKeys;
+      return;
+    }
+
     const newlyCompletedCells = new Set<CellKey>();
 
     for (const groupKey of currentCompletedGroupKeys) {
@@ -184,6 +206,17 @@
     }
 
     previousCompletedGroupKeys = currentCompletedGroupKeys;
+  });
+
+  $effect(() => {
+    const solvedNow = isPuzzleSolved(puzzleCandidate, solvedGrid);
+    isPuzzleSolvedNow = solvedNow;
+
+    if (solvedNow && !wasPuzzleSolved) {
+      puzzleCompletionTick += 1;
+    }
+
+    wasPuzzleSolved = solvedNow;
   });
 
   $effect(() => {
@@ -219,6 +252,8 @@
     {selectedCell}
     {selectedNumber}
     {cellCompletionTicks}
+    {puzzleCompletionTick}
+    {isPuzzleSolvedNow}
     {handleCellClick}
   />
   <NumberGrid 
