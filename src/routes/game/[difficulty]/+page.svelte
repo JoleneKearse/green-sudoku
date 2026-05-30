@@ -286,9 +286,14 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('/background.webp');
-    background-size: fit;
+    background-image: url('/trial-light.svg');
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+  }
+  @media (prefers-color-scheme: dark) {
+    main {
+      background-image: url('/trial-dark.svg');
+    }
   }
 </style>

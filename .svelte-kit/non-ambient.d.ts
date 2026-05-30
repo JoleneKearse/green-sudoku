@@ -40,6 +40,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | `/game/${string}` & {};
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/background.webp" | "/favicon.ico" | string & {};
+		Asset(): "/background-desktop.webp" | "/background-mobile.webp" | "/background.webp" | "/favicon.ico" | string & {};
 	}
 }

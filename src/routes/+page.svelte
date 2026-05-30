@@ -6,3 +6,7 @@
     <h1>Sudoku</h1>
     <AppButton />
 </main>
+
+<style>
+    h1 { margin-bottom: 6rem;}
+</style>
