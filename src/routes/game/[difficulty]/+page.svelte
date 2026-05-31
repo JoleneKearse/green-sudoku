@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { FILLED_VALUES } from "$lib/gamePlay/consts";
   import { generateCompletedPuzzle } from "$lib/gamePlay/generateCompletedPuzzle";
   import { removeValuesFromPuzzle } from '$lib/gamePlay/removeValuesFromPuzzle';
   import { findHiddenSingles, findNakedSingles, placeLikelyEasyMoves } from "$lib/gamePlay/puzzleDifficultyUtils";
@@ -119,10 +120,71 @@
   );
   let puzzleCompletionTick = $state(0);
   let isPuzzleSolvedNow = $state(isPuzzleSolved(initialPuzzle, solvedGrid));
+  let unavailableNumbers = $derived(
+    FILLED_VALUES.filter((value) =>
+      solvedGrid.every((row, rowIndex) =>
+        row.every(
+          (cell, colIndex) => cell !== value || puzzleCandidate[rowIndex][colIndex] === value,
+        ),
+      ),
+    ),
+  );
+  const INVALID_ENTRY_BLINK_INTERVAL_MS = 220;
+  const INVALID_ENTRY_BLINK_COUNT = 3;
+  const INVALID_ENTRY_DURATION_MS =
+    INVALID_ENTRY_BLINK_INTERVAL_MS * INVALID_ENTRY_BLINK_COUNT;
+  let invalidEntryTimeout: ReturnType<typeof setTimeout> | null = null;
+  let invalidEntrySession = 0;
+  let unavailableKeyboardFillCell = $state<{ row: number; col: number } | null>(null);
   let previousCompletedGroupKeys = new Set<string>(
     getCompletedGroupState(initialPuzzle, solvedGrid).groupKeys,
   );
   let wasPuzzleSolved = isPuzzleSolved(initialPuzzle, solvedGrid);
+
+  function updateCellValue(row: number, col: number, value: FilledCellValue | null) {
+    puzzleCandidate = puzzleCandidate.map((currentRow, rowIndex) =>
+      currentRow.map((cell, colIndex) =>
+        rowIndex === row && colIndex === col ? value : cell,
+      ),
+    );
+  }
+
+  function cancelInvalidEntryPreview() {
+    invalidEntrySession += 1;
+    unavailableKeyboardFillCell = null;
+    if (invalidEntryTimeout !== null) {
+      clearTimeout(invalidEntryTimeout);
+      invalidEntryTimeout = null;
+    }
+  }
+
+  function previewUnavailableNumber(row: number, col: number, number: FilledCellValue) {
+    if (initialPuzzle[row][col] !== null) {
+      selectedCell = null;
+      return;
+    }
+
+    const previousValue = puzzleCandidate[row][col];
+    cancelInvalidEntryPreview();
+    const session = invalidEntrySession;
+
+    updateCellValue(row, col, number);
+    selectedCell = { row, col };
+    unavailableKeyboardFillCell = { row, col };
+    isCorrect = false;
+
+    invalidEntryTimeout = setTimeout(() => {
+      if (session !== invalidEntrySession) {
+        return;
+      }
+
+      updateCellValue(row, col, previousValue);
+      unavailableKeyboardFillCell = null;
+      selectedCell = null;
+      isCorrect = true;
+      invalidEntryTimeout = null;
+    }, INVALID_ENTRY_DURATION_MS);
+  }
 
   function checkSelectedCell(row: number, col: number, number: FilledCellValue | null) {
     if (initialPuzzle[row][col] !== null || number === null) {
@@ -139,12 +201,14 @@
   }
 
   function handleCellClick(rowIndex: number, colIndex: number) {
+    cancelInvalidEntryPreview();
     selectedCell = { row: rowIndex, col: colIndex };
     isCorrect = true;
     console.log(`Clicked cell: ${JSON.stringify(selectedCell)}`);
   }
 
   function placeSelectedNumber(number: FilledCellValue | null, row?: number, col?: number) {
+    cancelInvalidEntryPreview();
     const targetRow = row ?? selectedCell?.row;
     const targetCol = col ?? selectedCell?.col;
 
@@ -155,11 +219,7 @@
       return;
     }
 
-    puzzleCandidate = puzzleCandidate.map((currentRow, rowIndex) =>
-      currentRow.map((cell, colIndex) =>
-        rowIndex === targetRow && colIndex === targetCol ? (number ?? null) : cell
-      )
-    );
+    updateCellValue(targetRow, targetCol, number ?? null);
 
     isCorrect = checkSelectedCell(targetRow, targetCol, number);
 
@@ -182,6 +242,12 @@
       event.preventDefault();
       const number = parseInt(key) as FilledCellValue;
       selectedNumber = number;
+
+      if (unavailableNumbers.includes(number)) {
+        previewUnavailableNumber(row, col, number);
+        return;
+      }
+
       placeSelectedNumber(number, row, col);
     } else if (key === "Backspace" || key === "Delete") {
       event.preventDefault();
@@ -267,6 +333,7 @@
     {isCorrect}
     {selectedCell}
     {selectedNumber}
+    {unavailableKeyboardFillCell}
     {cellCompletionTicks}
     {puzzleCompletionTick}
     {isPuzzleSolvedNow}
@@ -276,6 +343,7 @@
   <NumberGrid 
     {selectedNumber}
     {handleNumberPick}
+    {unavailableNumbers}
   />
 </main>
 

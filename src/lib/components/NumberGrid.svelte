@@ -5,15 +5,20 @@ import EraseIcon from "./EraseIcon.svelte";
 
     const keyboardValues: (FilledCellValue | "erase")[] = [...FILLED_VALUES, "erase"];
 
-    let { selectedNumber, handleNumberPick } = $props<{
+    let { selectedNumber, handleNumberPick, unavailableNumbers } = $props<{
         selectedNumber: FilledCellValue | null;
         handleNumberPick: (number: FilledCellValue | null) => void;
+        unavailableNumbers: FilledCellValue[];
     }>();
 </script>
 
 <div class="number-grid">
     {#each keyboardValues as value}
-        <button class="number-button" onclick={() => handleNumberPick(value === "erase" ? null : value)}>
+        <button
+            class="number-button"
+            disabled={value !== "erase" && unavailableNumbers.includes(value)}
+            onclick={() => handleNumberPick(value === "erase" ? null : value)}
+        >
             {#if value === "erase"}
                 <EraseIcon />
             {:else}
@@ -47,11 +52,21 @@ import EraseIcon from "./EraseIcon.svelte";
         border-radius: 8px;
         background-color: var(--bg-blur); 
         backdrop-filter: blur(1.75px);
-        color: var(--text-primary);
+        color: var(--text-h);
         cursor: pointer;
     }
 
     .number-button:hover {
         border-color: var(--border-3grid);
+    }
+
+    .number-button:disabled {
+        cursor: not-allowed;
+        border-color: var(--border-playing-opacity);
+        color: var(--text-user-filled);
+    }
+
+    .number-button:disabled:hover {
+        border-color: var(--border-playing-opacity);
     }
 </style>

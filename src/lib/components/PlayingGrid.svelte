@@ -1,9 +1,21 @@
 <script lang="ts">
-  let { puzzleCandidate, initialPuzzle, isCorrect, selectedCell, cellCompletionTicks, puzzleCompletionTick, isPuzzleSolvedNow, handleCellClick, handleKeyDown } = $props<{
+  let {
+    puzzleCandidate,
+    initialPuzzle,
+    isCorrect,
+    selectedCell,
+    unavailableKeyboardFillCell,
+    cellCompletionTicks,
+    puzzleCompletionTick,
+    isPuzzleSolvedNow,
+    handleCellClick,
+    handleKeyDown,
+  } = $props<{
     puzzleCandidate: SudokuGrid;
     initialPuzzle: SudokuGrid;
     isCorrect: boolean;
     selectedCell: { row: number; col: number } | null;
+    unavailableKeyboardFillCell: { row: number; col: number } | null;
     selectedNumber: FilledCellValue | null;
     cellCompletionTicks: number[][];
     puzzleCompletionTick: number;
@@ -26,7 +38,17 @@
         class:no-border-right= {colIndex === 8}
         class:no-border-bottom={rowIndex === 8}
         class:user-filled={initialPuzzle[rowIndex][colIndex] === null && cell !== null}
-        class:wrong-user-filled={!isCorrect && selectedCell?.row === rowIndex && selectedCell?.col === colIndex}
+        class:wrong-user-filled={
+          !isCorrect
+          && selectedCell?.row === rowIndex
+          && selectedCell?.col === colIndex
+          && (unavailableKeyboardFillCell?.row !== rowIndex
+            || unavailableKeyboardFillCell?.col !== colIndex)
+        }
+        class:wrong-unavailable-keyboard-fill={
+          unavailableKeyboardFillCell?.row === rowIndex
+          && unavailableKeyboardFillCell?.col === colIndex
+        }
         onclick={() => handleCellClick(rowIndex, colIndex)}
       >
         {#key cellCompletionTicks[rowIndex][colIndex]}
@@ -188,6 +210,23 @@
 
   .wrong-user-filled {
     color: var(--text-warning);
+  }
+
+  .wrong-unavailable-keyboard-fill {
+    color: var(--text-warning);
+    animation: wrong-entry-blink 0.3s ease-in-out 2;
+  }
+
+  @keyframes wrong-entry-blink {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 
   .thick-left {

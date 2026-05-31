@@ -41,6 +41,7 @@ declare module '$env/static/private' {
 	export const SHELL: string;
 	export const LSCOLORS: string;
 	export const npm_command: string;
+	export const USER_ZDOTDIR: string;
 	export const COLORTERM: string;
 	export const LESS: string;
 	export const HISTCONTROL: string;
@@ -56,6 +57,7 @@ declare module '$env/static/private' {
 	export const DOTNET_ROOT: string;
 	export const WARP_CLIENT_VERSION: string;
 	export const npm_config_verify_deps_before_run: string;
+	export const VSCODE_AGENT_ZSH_FIXUPS: string;
 	export const FIG_SET_PARENT_CHECK: string;
 	export const WARP_USE_SSH_WRAPPER: string;
 	export const npm_config__jsr_registry: string;
@@ -71,6 +73,7 @@ declare module '$env/static/private' {
 	export const PNPM_HOME: string;
 	export const npm_config_store_dir: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
+	export const VSCODE_INJECTION: string;
 	export const HOME: string;
 	export const LANG: string;
 	export const WSL_INTEROP: string;
@@ -95,15 +98,20 @@ declare module '$env/static/private' {
 	export const npm_package_name: string;
 	export const ZSH: string;
 	export const VSCODE_NONCE: string;
+	export const ZDOTDIR: string;
 	export const LESSOPEN: string;
 	export const USER: string;
 	export const npm_config_frozen_lockfile: string;
+	export const GIT_PAGER: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
 	export const FIG_PID: string;
+	export const VSCODE_PREVENT_SHELL_HISTORY: string;
 	export const DISPLAY: string;
 	export const npm_lifecycle_event: string;
 	export const SHLVL: string;
+	export const GIT_MERGE_AUTOEDIT: string;
 	export const GOTOOLCHAIN: string;
+	export const GIT_EDITOR: string;
 	export const PAGER: string;
 	export const npm_config_user_agent: string;
 	export const PNPM_SCRIPT_SRC_DIR: string;
@@ -114,6 +122,7 @@ declare module '$env/static/private' {
 	export const WARP_IS_LOCAL_SHELL_SESSION: string;
 	export const WSLENV: string;
 	export const npm_package_json: string;
+	export const COPILOT_AGENT: string;
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VITE_PLUS_TOOL_RECURSION: string;
 	export const XDG_DATA_DIRS: string;
@@ -131,7 +140,6 @@ declare module '$env/static/private' {
 	export const OLDPWD: string;
 	export const TERM_PROGRAM: string;
 	export const VSCODE_IPC_HOOK_CLI: string;
-	export const NODE_ENV: string;
 }
 
 /**
@@ -221,6 +229,7 @@ declare module '$env/dynamic/private' {
 		SHELL: string;
 		LSCOLORS: string;
 		npm_command: string;
+		USER_ZDOTDIR: string;
 		COLORTERM: string;
 		LESS: string;
 		HISTCONTROL: string;
@@ -236,6 +245,7 @@ declare module '$env/dynamic/private' {
 		DOTNET_ROOT: string;
 		WARP_CLIENT_VERSION: string;
 		npm_config_verify_deps_before_run: string;
+		VSCODE_AGENT_ZSH_FIXUPS: string;
 		FIG_SET_PARENT_CHECK: string;
 		WARP_USE_SSH_WRAPPER: string;
 		npm_config__jsr_registry: string;
@@ -251,6 +261,7 @@ declare module '$env/dynamic/private' {
 		PNPM_HOME: string;
 		npm_config_store_dir: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
+		VSCODE_INJECTION: string;
 		HOME: string;
 		LANG: string;
 		WSL_INTEROP: string;
@@ -275,15 +286,20 @@ declare module '$env/dynamic/private' {
 		npm_package_name: string;
 		ZSH: string;
 		VSCODE_NONCE: string;
+		ZDOTDIR: string;
 		LESSOPEN: string;
 		USER: string;
 		npm_config_frozen_lockfile: string;
+		GIT_PAGER: string;
 		VSCODE_GIT_IPC_HANDLE: string;
 		FIG_PID: string;
+		VSCODE_PREVENT_SHELL_HISTORY: string;
 		DISPLAY: string;
 		npm_lifecycle_event: string;
 		SHLVL: string;
+		GIT_MERGE_AUTOEDIT: string;
 		GOTOOLCHAIN: string;
+		GIT_EDITOR: string;
 		PAGER: string;
 		npm_config_user_agent: string;
 		PNPM_SCRIPT_SRC_DIR: string;
@@ -294,6 +310,7 @@ declare module '$env/dynamic/private' {
 		WARP_IS_LOCAL_SHELL_SESSION: string;
 		WSLENV: string;
 		npm_package_json: string;
+		COPILOT_AGENT: string;
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VITE_PLUS_TOOL_RECURSION: string;
 		XDG_DATA_DIRS: string;
@@ -311,7 +328,6 @@ declare module '$env/dynamic/private' {
 		OLDPWD: string;
 		TERM_PROGRAM: string;
 		VSCODE_IPC_HOOK_CLI: string;
-		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}
